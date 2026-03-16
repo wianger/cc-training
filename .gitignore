@@ -21,3 +21,7 @@ Makefile.in
 /datagrump/sender
 /datagrump/receiver
 *DS_Store
+.cache/
+*log
+compile_commands.json
+*.svg
