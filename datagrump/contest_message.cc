@@ -7,9 +7,8 @@ using namespace std;
 
 /* helper to get the nth uint64_t field (in network byte order) */
 uint64_t get_header_field(const size_t n, const string &str) {
-  if (str.size() < (n + 1) * sizeof(uint64_t)) {
+  if (str.size() < (n + 1) * sizeof(uint64_t))
     throw runtime_error("contest message too small to contain header");
-  }
 
   const uint64_t *const data_ptr =
       reinterpret_cast<const uint64_t *>(str.data()) + n;
@@ -56,7 +55,7 @@ string put_header_field(const uint64_t n) {
 
 /* Make wire representation of header */
 string ContestMessage::Header::to_string() const {
-  return put_header_field(static_cast<uint8_t>(type)) +
+  return put_header_field(static_cast<uint64_t>(type)) +
          put_header_field(sequence_number) + put_header_field(send_timestamp) +
          put_header_field(ack_sequence_number) +
          put_header_field(ack_send_timestamp) +

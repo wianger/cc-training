@@ -4,10 +4,11 @@
 #include <cstdint>
 #include <string>
 
-enum class MessageType : uint8_t {
+enum class MessageType : uint64_t {
   Data = 0,
   Ack = 1,
 };
+std::string message_type_to_string(MessageType type);
 
 struct ContestMessage {
   struct Header {

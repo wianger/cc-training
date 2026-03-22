@@ -37,8 +37,12 @@ int main(int argc, char *argv[]) {
     const UDPSocket::received_datagram recd = socket.recv();
     ContestMessage message = recd.payload;
 
+    std::cout << "message type: " << message_type_to_string(message.header.type)
+              << std::endl;
     /* assemble the acknowledgment */
     message.transform_into_ack(sequence_number++, recd.timestamp);
+    std::cout << "ack type: " << message_type_to_string(message.header.type)
+              << std::endl;
 
     /* timestamp the ack just before sending */
     message.set_send_timestamp();
