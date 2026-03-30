@@ -48,6 +48,8 @@ void Controller::ack_received(
     const uint64_t timestamp_ack_received)
 /* when the ack was received (by sender) */
 {
+  cout << "num_acked:" << sequence_number_acked << endl;
+
   /* Default: take no action */
 
   if (debug_) {
