@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "controller.hh"
 #include "timestamp.hh"
@@ -6,19 +7,17 @@
 using namespace std;
 
 /* Default constructor */
-Controller::Controller(const bool debug) : debug_(debug) {}
+Controller::Controller(const bool debug)
+    : debug_(debug), window_size_(50), last_ack_(0), has_last_ack_(false) {}
 
 /* Get current window size, in datagrams */
 unsigned int Controller::window_size() {
-  /* Default: fixed window size of 100 outstanding datagrams */
-  unsigned int the_window_size = 50;
-
   if (debug_) {
     cerr << "At time " << timestamp_ms() << " window size is "
-         << the_window_size << endl;
+         << window_size_ << endl;
   }
 
-  return the_window_size;
+  return window_size_;
 }
 
 /* A datagram was sent */
@@ -29,7 +28,10 @@ void Controller::datagram_was_sent(
     /* in milliseconds */
     const bool after_timeout
     /* datagram was sent because of a timeout */) {
-  /* Default: take no action */
+  if (after_timeout) {
+    cout << "timeout" << endl;
+    window_size_ = max(1u, window_size_ / 2);
+  }
 
   if (debug_) {
     cerr << "At time " << send_timestamp << " sent datagram " << sequence_number
@@ -50,7 +52,12 @@ void Controller::ack_received(
 {
   cout << "num_acked:" << sequence_number_acked << endl;
 
-  /* Default: take no action */
+  if (has_last_ack_ && sequence_number_acked == last_ack_) {
+    cout << "got same ack " << sequence_number_acked << endl;
+  }
+
+  last_ack_ = sequence_number_acked;
+  has_last_ack_ = true;
 
   if (debug_) {
     cerr << "At time " << timestamp_ack_received
