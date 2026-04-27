@@ -9,9 +9,17 @@ class Controller {
 private:
   bool debug_; /* Enables debugging output */
 
-  unsigned int window_size_;
+  double cwnd_;
+  double ssthresh_;
+
   uint64_t last_ack_;
   bool has_last_ack_;
+  unsigned int duplicate_ack_count_;
+
+  bool has_rtt_sample_;
+  double estimated_rtt_ms_;
+  double dev_rtt_ms_;
+  unsigned int rto_ms_;
 
 public:
   /* Public interface for the congestion controller */
